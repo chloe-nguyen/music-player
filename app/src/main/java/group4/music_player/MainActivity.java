@@ -27,10 +27,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import group4.music_player.dao.NoteDAO;
+
 public class MainActivity extends AppCompatActivity {
     ListView listView;
     String[] items;
-
+    private NoteDAO noteDao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +41,15 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.listViewSong);
 
         runtimePermission();
+        setUpDB();
+    }
+
+    private void setUpDB() {
+        noteDao = new NoteDAO(this, "MusicPlayer.sqlite", null, 1);
+        noteDao.QueryData("CREATE TABLE IF NOT EXISTS Note(\n" +
+                "   uri VARCHAR(200) PRIMARY KEY,\n" +
+                "   note VARCHAR(200) NOT NULL\n" +
+                ");");
     }
 
     public void runtimePermission() {
@@ -96,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String songName = (String) listView.getItemAtPosition(i);
                 startActivity(new Intent(getApplicationContext(), PlayerActivity.class)
+
                         .putExtra("songs", mySongs)
                         .putExtra("songname", songName)
                         .putExtra("pos", i));

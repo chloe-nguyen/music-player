@@ -11,6 +11,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,12 +24,15 @@ import com.gauravk.audiovisualizer.visualizer.BarVisualizer;
 import java.io.File;
 import java.util.ArrayList;
 
+import group4.music_player.model.Note;
+
 public class PlayerActivity extends AppCompatActivity {
     Button btnplay, btnnext, btnprev, btnff, btnfr;
     TextView txtsname, txtsstart, txtsstop;
     SeekBar seekmusic;
     BarVisualizer visualizer;
     String sname;
+    String uriString;
     public static final String EXTRA_NAME = "song_name";
     static MediaPlayer mediaPlayer;
     int position;
@@ -42,6 +46,10 @@ public class PlayerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if ((item.getItemId()== android.R.id.home)){
             onBackPressed();
+        }else if(item.getItemId() == R.id.btnNote){
+            Intent intent = new Intent(this, NoteActivity.class);
+            intent.putExtra("uri",uriString);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -87,6 +95,7 @@ public class PlayerActivity extends AppCompatActivity {
         position = bundle.getInt("pos", 0);
         txtsname.setSelected(true);
         Uri uri = Uri.parse(mySongs.get(position).toString());
+        uriString = uri.toString();
         sname = mySongs.get(position).getName();
         txtsname.setText(sname);
 
@@ -185,6 +194,7 @@ public class PlayerActivity extends AppCompatActivity {
                 mediaPlayer.release();
                 position= ((position+1)%mySongs.size());
                 Uri u = Uri.parse(mySongs.get(position).toString());
+                uriString = u.toString();
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), u);
                 sname = mySongs.get(position).getName();
                 txtsname.setText(sname);
@@ -207,6 +217,7 @@ public class PlayerActivity extends AppCompatActivity {
                 position =((position-1)<0)?(mySongs.size()-1):(position-1);
 
                 Uri u = Uri.parse(mySongs.get(position).toString());
+                uriString = u.toString();
                 mediaPlayer = mediaPlayer.create(getApplicationContext(), u);
                 sname= mySongs.get(position).getName();
                 txtsname.setText(sname);
@@ -239,6 +250,12 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.note,menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     public void StartAnimation(View view){
