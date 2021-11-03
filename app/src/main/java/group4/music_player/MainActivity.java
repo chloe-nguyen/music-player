@@ -1,11 +1,16 @@
 package group4.music_player;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,9 +34,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import group4.music_player.dao.NoteDAO;
+
 public class MainActivity extends AppCompatActivity {
     ListView listView;
     String[] items;
+    private NoteDAO noteDao;
     SearchView searchView;
     ArrayList<String> initItems, searchResultItems;
 
@@ -41,9 +49,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = findViewById(R.id.listViewSong);
-
+        setUpDB();
         runtimePermission();
 
+    }
+
+    private void setUpDB() {
+        noteDao = new NoteDAO(this, "MusicPlayer.sqlite", null, 1);
+        noteDao.QueryData("CREATE TABLE IF NOT EXISTS Note(\n" +
+                "   uri VARCHAR(200) PRIMARY KEY,\n" +
+                "   note VARCHAR(200) NOT NULL,\n" +
+                "   isLike INT NOT NULL\n" +
+                ");");
         // Search
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -84,17 +101,36 @@ public class MainActivity extends AppCompatActivity {
                 }).check();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.linktofavorite,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent = new Intent(this,FavoriteActivity.class);
+        startActivity(intent);
+        return super.onOptionsItemSelected(item);
+    }
+
     public ArrayList<File> findSong (File file) {
         ArrayList<File> arrayList = new ArrayList<>();
-
         File[] files = file.listFiles();
-        System.out.println("MESSAGE:"+files==null);
+
         if(files!=null){
             for (File singleFile: files) {
                 if (singleFile.isDirectory() && !singleFile.isHidden()) {
                     arrayList.addAll(findSong(singleFile));
                 } else {
                     if (singleFile.getName().endsWith(".mp3") || singleFile.getName().endsWith(".wav")) {
+                        Uri u = Uri.parse(singleFile.toString());
+                        //check if file not exist in db
+                        String sql = "";
+                        if(getNoteBefore(u.toString())==null){
+                            sql = "INSERT INTO Note VALUES ('" + u.toString() + "','" + "" + "','0')";
+                            noteDao.QueryData(sql);
+                        }
                         arrayList.add(singleFile);
                     }
                 }
@@ -127,13 +163,25 @@ public class MainActivity extends AppCompatActivity {
                 String songName = (String) listView.getItemAtPosition(i);
                 int pos = getPositionInInitItemsByName(songName);
                 startActivity(new Intent(getApplicationContext(), PlayerActivity.class)
+
                         .putExtra("songs", mySongs)
                         .putExtra("songname", songName)
                         .putExtra("pos", pos));
             }
         });
     }
+    public String getNoteBefore(String uri) {
+        String content = null;
+        String sql = "SELECT * FROM Note WHERE uri = '" + uri + "'";
+        Cursor dataNote = noteDao.GetData(sql);
+        if(dataNote.moveToNext()){
+            content = dataNote.getString(1);
 
+        }
+
+
+        return content;
+    }
     int getPositionInInitItemsByName(String input) {
         for (int i = 0; i < initItems.size(); i++) {
             if (initItems.get(i).equals(input))
@@ -193,4 +241,5 @@ public class MainActivity extends AppCompatActivity {
             return myView;
         }
     }
+
 }
