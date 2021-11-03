@@ -21,4 +21,12 @@
     <style name="Button.White" parent="ThemeOverlay.AppCompat">
         <item name="colorPrimary">@color/white</item>
     </style>
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
+        <!-- Query Text Color -->
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <!-- Hint Color -->
+        <item name="android:textColorHint">@color/material_on_primary_disabled</item>
+        <!-- Icon Color -->
+        <item name="android:tint">#FFFFFF</item>
+    </style>
 </resources>
