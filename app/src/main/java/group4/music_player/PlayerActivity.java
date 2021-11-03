@@ -69,7 +69,7 @@ public class PlayerActivity extends AppCompatActivity {
         btnff = findViewById(R.id.btnff);
         btnfr = findViewById(R.id.btnfr);
         txtsname = findViewById(R.id.txtsn);
-        txtsname = findViewById(R.id.txtsstart);
+//        txtsname = findViewById(R.id.txtsstart);
         txtsstop = findViewById(R.id.txtsstop);
         txtsstart = findViewById(R.id.txtsstart) ;
         seekmusic = findViewById(R.id.seekbar);
