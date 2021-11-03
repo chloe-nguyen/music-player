@@ -17,7 +17,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
@@ -38,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     String[] items;
     private NoteDAO noteDao;
+    SearchView searchView;
+    ArrayList<String> initItems, searchResultItems;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +61,29 @@ public class MainActivity extends AppCompatActivity {
                 "   note VARCHAR(200) NOT NULL,\n" +
                 "   isLike INT NOT NULL\n" +
                 ");");
+        // Search
+        searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchSongs(query);
+                if(searchResultItems.size() == 0){
+                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+                }
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.trim().equals("")) {
+                    items = new String[initItems.size()];
+                    for (int i = 0; i < initItems.size(); i++) {
+                        items[i] = initItems.get(i);
+                    }
+                }
+
+                return false;
+            }
+        });
     }
 
     public void runtimePermission() {
@@ -117,8 +145,10 @@ public class MainActivity extends AppCompatActivity {
         final ArrayList<File> mySongs = findSong(Environment.getExternalStorageDirectory());
 
         items = new String[mySongs.size()];
+        initItems = new ArrayList<>();
         for (int i = 0; i < mySongs.size(); i++) {
             items[i] = mySongs.get(i).getName().toString().replace(".mp3", "").replace(".wav", "");
+            initItems.add(items[i]);
         }
 
 //        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
@@ -131,11 +161,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String songName = (String) listView.getItemAtPosition(i);
+                int pos = getPositionInInitItemsByName(songName);
                 startActivity(new Intent(getApplicationContext(), PlayerActivity.class)
 
                         .putExtra("songs", mySongs)
                         .putExtra("songname", songName)
-                        .putExtra("pos", i));
+                        .putExtra("pos", pos));
             }
         });
     }
@@ -151,6 +182,38 @@ public class MainActivity extends AppCompatActivity {
 
         return content;
     }
+    int getPositionInInitItemsByName(String input) {
+        for (int i = 0; i < initItems.size(); i++) {
+            if (initItems.get(i).equals(input))
+                return i;
+        }
+        return 0;
+    }
+
+    void searchSongs(String searchValue) {
+        if (searchValue.trim().equals("")) {
+            items = new String[initItems.size()];
+            for (int i = 0; i < initItems.size(); i++) {
+                items[i] = initItems.get(i);
+            }
+            return;
+        }
+
+        searchResultItems = new ArrayList<>();
+        for (String name: initItems) {
+            if (name.toLowerCase().contains(searchValue.toLowerCase())) {
+                searchResultItems.add(name);
+            }
+        }
+        if (searchResultItems.size() == 0)
+            return;
+
+        items = new String[searchResultItems.size()];
+        for (int i = 0; i < searchResultItems.size(); i++) {
+            items[i] = searchResultItems.get(i);
+        }
+    }
+
     class CustomAdapter extends BaseAdapter {
 
         @Override
@@ -160,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Object getItem(int i) {
-            return null;
+            return items[i];
         }
 
         @Override

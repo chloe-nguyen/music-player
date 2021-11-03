@@ -3,7 +3,8 @@
     <!-- Base application theme. -->
     <style name="Theme.MusicPlayer" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+<!--        <item name="colorPrimary">@color/purple_500</item>-->
+        <item name="colorPrimary">@color/av_red</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -13,5 +14,19 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+    <style name="Button.Red" parent="ThemeOverlay.AppCompat">
+        <item name="colorPrimary">@color/av_red</item>
+    </style>
+    <style name="Button.White" parent="ThemeOverlay.AppCompat">
+        <item name="colorPrimary">@color/white</item>
+    </style>
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
+        <!-- Query Text Color -->
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <!-- Hint Color -->
+        <item name="android:textColorHint">@color/material_on_primary_disabled</item>
+        <!-- Icon Color -->
+        <item name="android:tint">#FFFFFF</item>
     </style>
 </resources>
