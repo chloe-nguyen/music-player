@@ -95,32 +95,24 @@
                 android:layout_height="70dp"
                 android:theme="@style/Button.Red">
             </Button>
-
             <Button
                 android:id="@+id/btnnext"
+                android:layout_toRightOf="@id/playbtn"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/ic_next"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-<<<<<<< HEAD
-                android:layout_marginTop="15dp"
-                android:layout_toRightOf="@id/playbtn"
-                android:background="@drawable/ic_next"></Button>
-
-=======
                 android:theme="@style/Button.White">
             </Button>
->>>>>>> origin/master
             <Button
                 android:id="@+id/btnprev"
+                android:layout_toLeftOf="@id/playbtn"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/ic_prev"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-<<<<<<< HEAD
-                android:layout_marginTop="15dp"
-                android:layout_toLeftOf="@id/playbtn"
-                android:background="@drawable/ic_prev"></Button>
-=======
                 android:theme="@style/Button.White">
             </Button>
->>>>>>> origin/master
             <Button
                 android:id="@+id/btnff"
                 android:layout_toRightOf="@id/btnnext"
