@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000"
-    tools:context=".MainActivity">
-<TextView
-    android:id="@+id/banner"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Audio List"
-    android:gravity="center"
-    android:textSize="20dp"
-    android:textColor="@color/white"
-   />
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    tools:context=".FavoriteActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Favorite List"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="25dp"/>
     <ListView
-        android:layout_below="@id/banner"
         android:id="@+id/listViewSong"
         android:divider="@android:color/transparent"
         android:dividerHeight="10.0sp"
@@ -24,4 +23,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</RelativeLayout>
+
+</LinearLayout>

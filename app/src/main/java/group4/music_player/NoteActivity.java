@@ -51,12 +51,11 @@ public class NoteActivity extends AppCompatActivity {
 
                 String sql = "";
                 if (getNoteBefore(uri) == null){
-                    sql = "INSERT INTO Note VALUES ('" + uri + "','" + content + "')";
+                    sql = "INSERT INTO Note VALUES ('" + uri + "','" + content + "','0')";
                 }else{
-                    System.out.println("MESSAGEz:"+getNoteBefore(uri) );
+
                     sql = "UPDATE Note SET note = '"+content+"' WHERE uri='"+uri+"'";
                 }
-
                 noteDAO.QueryData(sql);
             }
         }
@@ -70,7 +69,7 @@ public class NoteActivity extends AppCompatActivity {
         Cursor dataNote = noteDAO.GetData(sql);
         if(dataNote.moveToNext()){
             content = dataNote.getString(1);
-            System.out.println("MESSAGE2222:"+uri);
+
         }
 
 

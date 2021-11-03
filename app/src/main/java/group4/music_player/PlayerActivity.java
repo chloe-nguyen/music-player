@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -18,15 +19,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gauravk.audiovisualizer.visualizer.BarVisualizer;
 
 import java.io.File;
 import java.util.ArrayList;
 
+import group4.music_player.dao.NoteDAO;
 import group4.music_player.model.Note;
 
 public class PlayerActivity extends AppCompatActivity {
+    private NoteDAO noteDao;
     Button btnplay, btnnext, btnprev, btnff, btnfr;
     TextView txtsname, txtsstart, txtsstop;
     SeekBar seekmusic;
@@ -37,10 +41,9 @@ public class PlayerActivity extends AppCompatActivity {
     static MediaPlayer mediaPlayer;
     int position;
     ArrayList<File> mySongs;
-
     ImageView imageView ;
     Thread updateseekbar ;
-
+    Note playedNote;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -50,6 +53,16 @@ public class PlayerActivity extends AppCompatActivity {
             Intent intent = new Intent(this, NoteActivity.class);
             intent.putExtra("uri",uriString);
             startActivity(intent);
+        }else if(item.getItemId() == R.id.btnLike){
+            String sql = "UPDATE Note SET isLike = '1' WHERE uri='"+uriString+"'";
+            noteDao.QueryData(sql);
+            Toast.makeText(this, "Added To Favorite List", Toast.LENGTH_SHORT).show();
+            invalidateOptionsMenu();
+        }else if(item.getItemId() == R.id.btnUnlike){
+            String sql = "UPDATE Note SET isLike = '0' WHERE uri='"+uriString+"'";
+            noteDao.QueryData(sql);
+            Toast.makeText(this, "Removed To Favorite List", Toast.LENGTH_SHORT).show();
+            invalidateOptionsMenu();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -66,7 +79,7 @@ public class PlayerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-
+        noteDao = new NoteDAO(this, "MusicPlayer.sqlite", null, 1);
         getSupportActionBar().setTitle("Now Playing");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -96,6 +109,7 @@ public class PlayerActivity extends AppCompatActivity {
         txtsname.setSelected(true);
         Uri uri = Uri.parse(mySongs.get(position).toString());
         uriString = uri.toString();
+
         sname = mySongs.get(position).getName();
         txtsname.setText(sname);
 
@@ -254,7 +268,13 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.note,menu);
+        playedNote = getNoteBefore(uriString);
+        if(playedNote.isLike()){
+            getMenuInflater().inflate(R.menu.note_unlike,menu);
+        }else{
+            getMenuInflater().inflate(R.menu.note,menu);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -277,5 +297,28 @@ public class PlayerActivity extends AppCompatActivity {
         }
         time+= sec ;
         return time ;
+    }
+    public Note getNoteBefore(String uri) {
+        String content = null;
+        String uriString = null;
+        boolean like = false;
+        String sql = "SELECT * FROM Note WHERE uri = '" + uri + "'";
+        Cursor dataNote = noteDao.GetData(sql);
+        Note result = null;
+        if(dataNote.moveToNext()){
+            uriString = dataNote.getString(0);
+            content = dataNote.getString(1);
+
+            // check isLike with convert data INT to String
+            if(String.valueOf(dataNote.getInt(2)).equals("1")){
+                like = true;
+            }else{
+                like = false;
+            }
+
+
+            result = new Note(uriString,content,like);
+        }
+        return result;
     }
 }
