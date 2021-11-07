@@ -5,21 +5,25 @@
       <map>
         <entry key="..\:/Document/Term7/PRM391-ThanhPC/Coding/project/music-player/app/src/main/res/drawable/ic_fast_rewind.xml" value="0.26614583333333336" />
         <entry key="..\:/Document/Term7/PRM391-ThanhPC/Coding/project/music-player/app/src/main/res/layout/activity_player.xml" value="0.2359375" />
+        <entry key="..\:/Users/nguye/Desktop/music-player/app/src/main/res/layout/activity_main.xml" value="0.16530797101449277" />
         <entry key="..\:/Users/nguye/Desktop/music-player/app/src/main/res/layout/activity_player.xml" value="0.2028985507246377" />
         <entry key="..\:/music-player/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22135416666666666" />
         <entry key="..\:/music-player/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.22135416666666666" />
+        <entry key="..\:/music-player/app/src/main/res/drawable/ic_pause.xml" value="0.18802083333333333" />
         <entry key="..\:/music-player/app/src/main/res/drawable/link_foreground.xml" value="0.19427083333333334" />
         <entry key="..\:/music-player/app/src/main/res/drawable/note_foreground.xml" value="0.22135416666666666" />
         <entry key="..\:/music-player/app/src/main/res/layout/activity_favorite.xml" value="0.33" />
         <entry key="..\:/music-player/app/src/main/res/layout/activity_main.xml" value="0.24289772727272727" />
         <entry key="..\:/music-player/app/src/main/res/layout/activity_note.xml" value="0.20520833333333333" />
         <entry key="..\:/music-player/app/src/main/res/layout/activity_player.xml" value="0.36666666666666664" />
+        <entry key="..\:/music-player/app/src/main/res/layout/activity_timer_dialog.xml" value="0.20104166666666667" />
         <entry key="..\:/music-player/app/src/main/res/layout/fragment_note.xml" value="0.36666666666666664" />
         <entry key="..\:/music-player/app/src/main/res/layout/fragment_player.xml" value="0.36666666666666664" />
         <entry key="..\:/music-player/app/src/main/res/layout/list_item.xml" value="0.36666666666666664" />
         <entry key="..\:/music-player/app/src/main/res/menu/linktofavorite.xml" value="0.36666666666666664" />
         <entry key="..\:/music-player/app/src/main/res/menu/note-unlike.xml" value="0.178125" />
         <entry key="..\:/music-player/app/src/main/res/menu/note.xml" value="0.36666666666666664" />
+        <entry key="..\:/music-player/app/src/main/res/menu/note_unlike.xml" value="0.20104166666666667" />
         <entry key="..\:/music-player/app/src/main/res/menu/save.xml" value="0.36666666666666664" />
       </map>
     </option>

@@ -2,11 +2,17 @@ package group4.music_player;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
@@ -36,7 +42,8 @@ import java.util.List;
 
 import group4.music_player.dao.NoteDAO;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
+
     ListView listView;
     String[] items;
     private NoteDAO noteDao;
@@ -67,11 +74,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchSongs(query);
-                if(searchResultItems.size() == 0){
-                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
+                if (searchResultItems.size() == 0) {
+                    Toast.makeText(MainActivity.this, "No Match found", Toast.LENGTH_LONG).show();
                 }
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.trim().equals("")) {
@@ -96,30 +104,30 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
-                    permissionToken.continuePermissionRequest();
+                        permissionToken.continuePermissionRequest();
                     }
                 }).check();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.linktofavorite,menu);
+        getMenuInflater().inflate(R.menu.linktofavorite, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Intent intent = new Intent(this,FavoriteActivity.class);
+        Intent intent = new Intent(this, FavoriteActivity.class);
         startActivity(intent);
         return super.onOptionsItemSelected(item);
     }
 
-    public ArrayList<File> findSong (File file) {
+    public ArrayList<File> findSong(File file) {
         ArrayList<File> arrayList = new ArrayList<>();
         File[] files = file.listFiles();
 
-        if(files!=null){
-            for (File singleFile: files) {
+        if (files != null) {
+            for (File singleFile : files) {
                 if (singleFile.isDirectory() && !singleFile.isHidden()) {
                     arrayList.addAll(findSong(singleFile));
                 } else {
@@ -127,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                         Uri u = Uri.parse(singleFile.toString());
                         //check if file not exist in db
                         String sql = "";
-                        if(getNoteBefore(u.toString())==null){
+                        if (getNoteBefore(u.toString()) == null) {
                             sql = "INSERT INTO Note VALUES ('" + u.toString() + "','" + "" + "','0')";
                             noteDao.QueryData(sql);
                         }
@@ -170,11 +178,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public String getNoteBefore(String uri) {
         String content = null;
         String sql = "SELECT * FROM Note WHERE uri = '" + uri + "'";
         Cursor dataNote = noteDao.GetData(sql);
-        if(dataNote.moveToNext()){
+        if (dataNote.moveToNext()) {
             content = dataNote.getString(1);
 
         }
@@ -182,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
         return content;
     }
+
     int getPositionInInitItemsByName(String input) {
         for (int i = 0; i < initItems.size(); i++) {
             if (initItems.get(i).equals(input))
@@ -200,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         searchResultItems = new ArrayList<>();
-        for (String name: initItems) {
+        for (String name : initItems) {
             if (name.toLowerCase().contains(searchValue.toLowerCase())) {
                 searchResultItems.add(name);
             }
@@ -213,6 +223,10 @@ public class MainActivity extends AppCompatActivity {
             items[i] = searchResultItems.get(i);
         }
     }
+
+
+
+
 
     class CustomAdapter extends BaseAdapter {
 
