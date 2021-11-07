@@ -10,4 +10,9 @@
         android:title="Remove to favorive list"
         android:icon="@drawable/note_foreground"
         />
+    <item
+        android:id="@+id/btnTimer"
+        android:title="Set Timer"
+        android:icon="@drawable/note_foreground"
+        />
 </menu>
