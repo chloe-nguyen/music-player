@@ -45,7 +45,7 @@
 
             <SeekBar
                 android:id="@+id/seekbar"
-                android:layout_width="240dp"
+                android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerInParent="true"
@@ -95,15 +95,15 @@
                 android:layout_height="70dp"
                 android:theme="@style/Button.Red">
             </Button>
+
             <Button
                 android:id="@+id/btnnext"
-                android:layout_toRightOf="@id/playbtn"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/ic_next"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:theme="@style/Button.White">
-            </Button>
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/playbtn"
+                android:background="@drawable/ic_next"
+                android:theme="@style/Button.White"></Button>
             <Button
                 android:id="@+id/btnprev"
                 android:layout_toLeftOf="@id/playbtn"

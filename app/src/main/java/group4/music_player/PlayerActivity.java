@@ -124,7 +124,7 @@ public class PlayerActivity extends AppCompatActivity {
 
                 while(currenposition< totalDuration){
                     try {
-                        sleep(500);
+                        sleep(200);
                         currenposition = mediaPlayer.getCurrentPosition();
                         seekmusic.setProgress(currenposition);
                     }
@@ -191,8 +191,16 @@ public class PlayerActivity extends AppCompatActivity {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-                btnnext.performClick();
 
+//                txtsstart.setText("0:00");
+//                String endTime = createTime(mediaPlayer.getDuration());
+//                txtsstop.setText(endTime);
+//                txtsstop.setText(mediaPlayer.getDuration());
+
+//                seekmusic.setProgress(mediaPlayer.getDuration());
+                seekmusic.setMax(0);
+
+                btnnext.performClick();
             }
         });
 
@@ -212,6 +220,14 @@ public class PlayerActivity extends AppCompatActivity {
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), u);
                 sname = mySongs.get(position).getName();
                 txtsname.setText(sname);
+
+
+                txtsstart.setText("0:00");
+                txtsstop.setText(createTime(mediaPlayer.getDuration()));
+                mediaPlayer.start();
+                seekmusic.setMax(mediaPlayer.getDuration());
+                seekmusic.refreshDrawableState();
+
                 mediaPlayer.start();
                 btnplay.setBackgroundResource(R.drawable.ic_pause);
                 StartAnimation(imageView);
@@ -228,13 +244,18 @@ public class PlayerActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mediaPlayer.stop();
                 mediaPlayer.release();
+//                position =((position-1)<0)?(mySongs.size()-1):(position-1);
+                System.out.println("POSITION BEFORE:"+position);
                 position =((position-1)<0)?(mySongs.size()-1):(position-1);
+                System.out.println("POSITION AFTER:"+position);
+                System.out.println("SIZE:"+mySongs.size());
 
                 Uri u = Uri.parse(mySongs.get(position).toString());
                 uriString = u.toString();
                 mediaPlayer = mediaPlayer.create(getApplicationContext(), u);
                 sname= mySongs.get(position).getName();
                 txtsname.setText(sname);
+                System.out.println(sname);
                 mediaPlayer.start();
                 btnplay.setBackgroundResource(R.drawable.ic_pause);
                 StartAnimation(imageView);
@@ -298,6 +319,8 @@ public class PlayerActivity extends AppCompatActivity {
         time+= sec ;
         return time ;
     }
+
+
     public Note getNoteBefore(String uri) {
         String content = null;
         String uriString = null;
